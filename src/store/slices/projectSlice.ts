@@ -111,6 +111,12 @@ export const projectSlice = createSlice({
         );
       }
     },
+
+    // Migration completion action - clears old structures after successful migration
+    completeMigration: (state) => {
+      state.oldProjects = []; // Clear old projects after migration
+      state.directions = []; // Clear directions after migration
+    },
   },
 });
 

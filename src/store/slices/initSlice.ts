@@ -1,15 +1,17 @@
 // src/store/slices/initSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../entities/user/types";
-import { Project, Direction, Type } from "../../entities/types";
+import { Project, Direction, Type, OldProject } from "../../entities/types";
 import { TimeEntry } from "../../entities/types";
-import { setProjects, setDirections, setTypes } from "./projectSlice";
+import { setProjects, setDirections, setTypes, completeMigration } from "./projectSlice";
 import { setTimeEntries } from "./timeEntrySlice";
 import { setUsers } from "./userSlice";
+import { performFullMigration, isMigrationNeeded } from "../../lib/utils/migrationUtils";
 
 interface InitialData {
   users: User[];
-  projects: Project[];
+  projects: Project[]; // New projects structure
+  oldProjects?: OldProject[]; // Old projects structure for migration
   directions: Direction[];
   types: Type[];
   timeEntries: TimeEntry[];
@@ -77,17 +79,50 @@ export const loadData = (jsonData: InitialData) => (dispatch: any) => {
     dispatch(setUsers(jsonData.users));
     // Если у вас есть отдельный слайс для текущего пользователя, возможно, нужно обновить его
 
-    // 2. Загружаем типы (новая структура)
-    dispatch(setTypes(jsonData.types || []));
+    // 2. Check if migration is needed from old structure to new structure
+    const oldProjects = jsonData.oldProjects || [];
+    const existingProjects = jsonData.projects || [];
+    const existingTypes = jsonData.types || [];
+    const existingDirections = jsonData.directions || [];
+    const existingTimeEntries = jsonData.timeEntries || [];
 
-    // 3. Загружаем проекты
-    dispatch(setProjects(jsonData.projects));
+    // Check if migration is needed
+    if (isMigrationNeeded(existingProjects, oldProjects, existingTypes)) {
+      console.log("Migration needed, performing migration...");
+      
+      // Perform full migration
+      const migratedData = performFullMigration(
+        oldProjects,
+        existingDirections,
+        existingTimeEntries,
+        jsonData.users,
+        existingTypes
+      );
 
-    // 4. Загружаем направления
-    dispatch(setDirections(jsonData.directions));
+      // Load migrated data
+      dispatch(setTypes(migratedData.types));
+      dispatch(setProjects(migratedData.projects));
+      dispatch(setDirections(migratedData.directions));
+      dispatch(setTimeEntries(migratedData.timeEntries));
+      // Users are updated with projectIds during migration
+      dispatch(setUsers(migratedData.users));
+      
+      // Complete migration by clearing old structures
+      dispatch(completeMigration());
+    } else {
+      // No migration needed, load data as is
+      // 2. Загружаем типы (новая структура)
+      dispatch(setTypes(jsonData.types || []));
 
-    // 5. Загружаем записи времени
-    dispatch(setTimeEntries(jsonData.timeEntries));
+      // 3. Загружаем проекты
+      dispatch(setProjects(jsonData.projects));
+
+      // 4. Загружаем направления
+      dispatch(setDirections(jsonData.directions));
+
+      // 5. Загружаем записи времени
+      dispatch(setTimeEntries(jsonData.timeEntries));
+    }
 
     dispatch(loadDataSuccess());
   } catch (error) {
@@ -106,6 +141,9 @@ export const saveData = () => (dispatch: any, getState: any) => {
     const dataToSave: InitialData = {
       users: state.users.list,
       projects: state.projects.projects,
+      // Include oldProjects for backward compatibility during migration period
+      // In the future, we can remove this to fully transition to the new structure
+      oldProjects: state.projects.oldProjects || [], // Keep old projects for migration
       directions: state.projects.directions,
       types: state.projects.types,
       timeEntries: state.timeEntries,
