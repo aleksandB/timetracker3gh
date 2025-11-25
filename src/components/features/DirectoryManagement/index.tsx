@@ -5,8 +5,10 @@ import { Button } from "../../ui/button";
 import { EmployeeManagementUI } from "./EmployeeManagementUI";
 import { DirectionManagementUI } from "./DirectionManagementUI";
 import { ProjectManagementUI } from "./ProjectManagementUI";
+import { TypeManagementUI } from "./TypeManagementUI";
+import { useTypeManagement } from "./hooks/useTypeManagement";
 import { User } from "../../../entities/user/types";
-import { Project, Direction } from "../../../entities/types"; // ✅ Добавляем импорт типов
+import { Project, Direction, Type } from "../../../entities/types"; // ✅ Добавляем импорт типов
 
 interface DirectoryManagementProps {
   currentUser: User;
@@ -14,7 +16,7 @@ interface DirectoryManagementProps {
 
 export function DirectoryManagement() {
   const [activeTab, setActiveTab] = useState<
-    "employees" | "directions" | "projects"
+    "employees" | "directions" | "projects" | "types"
   >("employees");
 
   const [employeeDialogOpen, setEmployeeDialogOpen] = useState(false);
@@ -25,6 +27,22 @@ export function DirectoryManagement() {
 
   const [projectDialogOpen, setProjectDialogOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState<Project | null>(null); // ✅ Используем Project вместо any
+
+  const [typeDialogOpen, setTypeDialogOpen] = useState(false);
+  const [currentType, setCurrentType] = useState<Type | null>(null);
+
+  // Используем хук для управления типами
+  const {
+    types,
+    handleSave: handleTypeSave,
+    handleEdit: handleTypeEdit,
+    handleDelete: handleTypeDelete,
+  } = useTypeManagement({
+    isDialogOpen: typeDialogOpen,
+    setIsDialogOpen: setTypeDialogOpen,
+    currentType,
+    setCurrentType,
+  });
 
   const openAddEmployeeDialog = () => {
     setCurrentEmployee(null);
@@ -41,6 +59,11 @@ export function DirectoryManagement() {
     setProjectDialogOpen(true);
   };
 
+  const openAddTypeDialog = () => {
+    setCurrentType(null);
+    setTypeDialogOpen(true);
+  };
+
   const getHandleAdd = () => {
     switch (activeTab) {
       case "employees":
@@ -49,6 +72,8 @@ export function DirectoryManagement() {
         return openAddDirectionDialog;
       case "projects":
         return openAddProjectDialog;
+      case "types":
+        return openAddTypeDialog;
       default:
         return () => {};
     }
@@ -66,19 +91,22 @@ export function DirectoryManagement() {
             ? "сотрудника"
             : activeTab === "directions"
             ? "направление"
-            : "проект"}
+            : activeTab === "projects"
+            ? "проект"
+            : "тип"}
         </Button>
       </div>
 
       <Tabs
         value={activeTab}
-        onValueChange={(value) => setActiveTab(value as "employees" | "directions" | "projects")} // ✅ Используем правильный тип вместо any
+        onValueChange={(value) => setActiveTab(value as "employees" | "directions" | "projects" | "types")} // ✅ Используем правильный тип вместо any
         className="mb-6"
       >
         <TabsList>
           <TabsTrigger value="employees">Сотрудники</TabsTrigger>
           <TabsTrigger value="directions">Направления</TabsTrigger>
           <TabsTrigger value="projects">Проекты</TabsTrigger>
+          <TabsTrigger value="types">Типы</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -105,6 +133,18 @@ export function DirectoryManagement() {
           setIsDialogOpen={setProjectDialogOpen}
           currentProject={currentProject}
           setCurrentProject={setCurrentProject}
+        />
+      )}
+      {activeTab === "types" && (
+        <TypeManagementUI
+          isDialogOpen={typeDialogOpen}
+          setIsDialogOpen={setTypeDialogOpen}
+          currentType={currentType}
+          setCurrentType={setCurrentType}
+          types={types}
+          handleSave={handleTypeSave}
+          handleEdit={handleTypeEdit}
+          handleDelete={handleTypeDelete}
         />
       )}
     </div>

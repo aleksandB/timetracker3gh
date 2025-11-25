@@ -26,7 +26,7 @@ import {
   SelectItem,
 } from "../../ui/select";
 import { useProjectManagement } from "./hooks/useProjectManagement";
-import { Project, ProjectType } from "../../../entities/project/types"; // ✅ Добавляем импорт типов
+import { Project, Type } from "../../../entities/project/types"; // ✅ Добавляем импорт типов
 
 interface ProjectManagementUIProps {
   isDialogOpen: boolean;
@@ -44,6 +44,7 @@ export function ProjectManagementUI({
   const {
     projects,
     directions,
+    types,
     selectedDirectionIds,
     setSelectedDirectionIds,
     handleSave,
@@ -55,6 +56,19 @@ export function ProjectManagementUI({
     currentProject,
     setCurrentProject,
   });
+
+  // Функция для получения названия типа по ID
+  const getTypeName = (typeId: number) => {
+    const type = types.find(t => t.id === typeId);
+    return type ? type.name : 'Неизвестный тип';
+  };
+
+  // Функция для получения родительского проекта по ID
+  const getParentProjectName = (parentId: string | null) => {
+    if (!parentId) return 'Нет (корневой проект)';
+    const parentProject = projects.find(p => p.id === parentId);
+    return parentProject ? parentProject.name : 'Неизвестный проект';
+  };
 
   return (
     <>
@@ -69,7 +83,8 @@ export function ProjectManagementUI({
                 <TableHead>ID</TableHead>
                 <TableHead>Название</TableHead>
                 <TableHead>Тип</TableHead>
-                <TableHead>Количество направлений</TableHead>
+                <TableHead>Родительский проект</TableHead>
+                <TableHead>Краткое имя</TableHead>
                 <TableHead>Действия</TableHead>
               </TableRow>
             </TableHeader>
@@ -78,8 +93,9 @@ export function ProjectManagementUI({
                 <TableRow key={proj.id}>
                   <TableCell>{proj.id}</TableCell>
                   <TableCell>{proj.name}</TableCell>
-                  <TableCell>{proj.type}</TableCell>
-                  <TableCell>{proj.directionIds?.length || 0}</TableCell>
+                  <TableCell>{getTypeName(proj.typeId)}</TableCell>
+                  <TableCell>{getParentProjectName(proj.parentId)}</TableCell>
+                  <TableCell>{proj.shortName || '-'}</TableCell>
                   <TableCell>
                     <Button
                       variant="outline"
@@ -125,13 +141,25 @@ export function ProjectManagementUI({
               />
             </div>
             <div>
+              <Label>Краткое имя</Label>
+              <Input
+                value={currentProject?.shortName || ""}
+                onChange={(e) =>
+                  setCurrentProject({
+                    ...currentProject!,
+                    shortName: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div>
               <Label>Тип</Label>
               <Select
-                value={currentProject?.type || "technical"}
+                value={currentProject?.typeId?.toString() || "2"}
                 onValueChange={(value) =>
                   setCurrentProject({
                     ...currentProject!,
-                    type: value as ProjectType, // ✅ Используем ProjectType вместо any
+                    typeId: Number(value),
                   })
                 }
               >
@@ -139,42 +167,39 @@ export function ProjectManagementUI({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="technical">Технический</SelectItem>
-                  <SelectItem value="administrative">
-                    Административный
-                  </SelectItem>
+                  {types.map((type) => (
+                    <SelectItem key={type.id} value={type.id.toString()}>
+                      {type.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Направления</Label>
-              <div className="space-y-2 max-h-60 overflow-y-auto border rounded p-2">
-                {directions.map((dir) => (
-                  <div key={dir.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={`dir-checkbox-${dir.id}`}
-                      checked={selectedDirectionIds.includes(dir.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedDirectionIds([
-                            ...selectedDirectionIds,
-                            dir.id,
-                          ]);
-                        } else {
-                          setSelectedDirectionIds(
-                            selectedDirectionIds.filter((id) => id !== dir.id)
-                          );
-                        }
-                      }}
-                      className="mr-2"
-                    />
-                    <label htmlFor={`dir-checkbox-${dir.id}`}>
-                      {dir.name} ({dir.type})
-                    </label>
-                  </div>
-                ))}
-              </div>
+              <Label>Родительский проект</Label>
+              <Select
+                value={currentProject?.parentId || "null"}
+                onValueChange={(value) =>
+                  setCurrentProject({
+                    ...currentProject!,
+                    parentId: value === "null" ? null : value,
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="null">Нет (корневой проект)</SelectItem>
+                  {projects
+                    .filter(p => p.id !== currentProject?.id) // Исключаем текущий проект из списка родителей
+                    .map((project) => (
+                      <SelectItem key={project.id} value={project.id}>
+                        {project.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="flex justify-end space-x-2">

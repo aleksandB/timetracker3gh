@@ -6,8 +6,12 @@ import {
   addProject,
   updateProject,
   removeProject,
+  addType,
+  updateType,
+  removeType,
+  setTypes,
 } from "../../../../store/slices/projectSlice";
-import { Project } from "../../../../entities/project/types"; // ✅ Добавляем импорт Project
+import { Project, Type } from "../../../../entities/project/types"; // ✅ Добавляем импорт Project и Type
 
 interface UseProjectManagementProps {
   isDialogOpen: boolean;
@@ -27,6 +31,9 @@ export const useProjectManagement = ({
   const directions = useSelector(
     (state: RootState) => state.projects.directions
   );
+  const types = useSelector(
+    (state: RootState) => state.projects.types
+  );
 
   const [selectedDirectionIds, setSelectedDirectionIds] = useState<string[]>(
     []
@@ -35,7 +42,7 @@ export const useProjectManagement = ({
   // ❗️Синхронизируем состояние при открытии диалога редактирования
   useEffect(() => {
     if (isDialogOpen && currentProject) {
-      setSelectedDirectionIds(currentProject.directionIds || []);
+      setSelectedDirectionIds([]);
     } else if (isDialogOpen && !currentProject) {
       // При добавлении нового проекта, список направлений пуст
       setSelectedDirectionIds([]);
@@ -45,9 +52,12 @@ export const useProjectManagement = ({
   const handleSave = () => {
     if (!currentProject) return;
 
-    const projectToSave = {
+    // Сохраняем проект с новой структурой
+    const projectToSave: Project = {
       ...currentProject,
-      directionIds: selectedDirectionIds,
+      parentId: currentProject.parentId || null,
+      typeId: currentProject.typeId,
+      shortName: currentProject.shortName,
     };
 
     if (projectToSave.id) {
@@ -81,6 +91,7 @@ export const useProjectManagement = ({
   return {
     projects,
     directions,
+    types,
     selectedDirectionIds,
     setSelectedDirectionIds,
     handleSave,
