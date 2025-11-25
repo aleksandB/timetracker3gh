@@ -6,6 +6,8 @@ export type { Category, CategoryType } from "./category/types";
 export type {
   Direction,
   Project,
+  OldProject,
+  Type,
   ProjectType,
   DirectionType,
 } from "./project/types";

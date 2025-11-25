@@ -10,13 +10,13 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox"; // убедитесь, что у вас есть компонент Checkbox
-import { Project, Direction } from "../../entities/project/types";
+import { Project, Direction, OldProject } from "../../entities/project/types";
 
 interface AddProjectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onAddProject: (projectIds: string[]) => void;
-  allProjects: Project[];
+  allProjects: (Project | OldProject)[]; // Support both old and new project structures
   allDirections: Direction[];
   assignedProjectIds: Set<string>;
 }
@@ -84,30 +84,34 @@ export function AddProjectDialog({
             <p className="text-slate-500">Нет доступных проектов</p>
           ) : (
             allProjects.map((project) => {
-              const directions = directionsByProject[project.id] || [];
-              const isAssigned = assignedProjectIds.has(project.id);
+              // Handle both old and new project structures
+              const projectId = project.id;
+              const projectName = project.name;
+              
+              const directions = directionsByProject[projectId] || [];
+              const isAssigned = assignedProjectIds.has(projectId);
               const isChecked =
-                isAssigned || selectedNewProjectIds.has(project.id);
+                isAssigned || selectedNewProjectIds.has(projectId);
               const isDisabled = isAssigned;
 
               return (
-                <div key={project.id} className="border rounded-lg p-4">
+                <div key={projectId} className="border rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Checkbox
-                      id={`proj-${project.id}`}
+                      id={`proj-${projectId}`}
                       checked={isChecked}
-                      onCheckedChange={() => toggleProject(project.id)}
+                      onCheckedChange={() => toggleProject(projectId)}
                       disabled={isDisabled}
                     />
                     <label
-                      htmlFor={`proj-${project.id}`}
+                      htmlFor={`proj-${projectId}`}
                       className={`font-medium ${
                         isAssigned
                           ? "text-slate-500 line-through"
                           : "text-slate-900"
                       }`}
                     >
-                      {project.name} {isAssigned && "(назначен)"}
+                      {projectName} {isAssigned && "(назначен)"}
                     </label>
                   </div>
 
