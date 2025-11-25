@@ -50,8 +50,8 @@ export const useTypeManagement = ({
     // Если это создание нового, то проверяем, что ID не занят
     const isUpdate = !!currentType.id;
     if (isUpdate) {
-      // При обновлении проверяем, что другой тип не использует такой ID
-      if (types.some(t => t.id === currentType.id && t.id !== (currentType as Type).id)) {
+      // При обновлении проверяем, что другой тип (не текущий) не использует такой ID
+      if (types.some(t => t.id === currentType.id && t.id !== currentType.id)) {
         alert("Тип с таким ID уже существует");
         return;
       }
