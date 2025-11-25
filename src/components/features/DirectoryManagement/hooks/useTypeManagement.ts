@@ -7,7 +7,7 @@ import {
   updateType,
   removeType,
 } from "../../../../store/slices/projectSlice";
-import { Type } from "../../../../entities/project/types";
+import { Type } from "../../../../entities/types";
 
 interface UseTypeManagementProps {
   isDialogOpen: boolean;
@@ -28,6 +28,12 @@ export const useTypeManagement = ({
   const handleSave = () => {
     if (!currentType) return;
 
+    // Проверяем, что ID не пустой и не равен 0 при создании
+    if (!currentType.id || currentType.id <= 0) {
+      alert("ID должен быть положительным числом");
+      return;
+    }
+
     // Проверяем, что parentId не ссылается на сам тип (цикл)
     if (currentType.parentId === currentType.id) {
       alert("Тип не может быть родителем самому себе");
@@ -39,7 +45,29 @@ export const useTypeManagement = ({
       parentId: currentType.parentId,
     };
 
-    if (typeToSave.id) {
+    // Проверяем, существует ли уже тип с таким ID
+    // Если это обновление (редактирование), то не учитываем текущий тип при проверке дубликата
+    // Если это создание нового, то проверяем, что ID не занят
+    const isUpdate = !!currentType.id;
+    if (isUpdate) {
+      // При обновлении проверяем, что другой тип (не текущий) не использует такой ID
+      if (types.some(t => t.id === currentType.id && t.id !== currentType.id)) {
+        alert("Тип с таким ID уже существует");
+        return;
+      }
+    } else {
+      // При создании проверяем, что ID не равен 0 или отрицательному числу и не занят
+      if (currentType.id <= 0) {
+        alert("ID должен быть положительным числом");
+        return;
+      }
+      if (types.some(t => t.id === currentType.id)) {
+        alert("Тип с таким ID уже существует");
+        return;
+      }
+    }
+
+    if (currentType.id) {
       dispatch(updateType(typeToSave));
     } else {
       dispatch(

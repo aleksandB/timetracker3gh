@@ -1,5 +1,5 @@
 // src/lib/utils/projectUtils.ts
-import { Project } from "../../entities/project/types";
+import { Project } from "../../entities/types";
 
 export interface ProjectTreeNode {
   project: Project;

@@ -25,7 +25,7 @@ import {
   SelectContent,
   SelectItem,
 } from "../../ui/select";
-import { Type } from "../../../entities/project/types";
+import { Type } from "../../../entities/types";
 
 interface TypeManagementUIProps {
   isDialogOpen: boolean;
@@ -113,13 +113,14 @@ export function TypeManagementUI({
               <Label>ID</Label>
               <Input
                 type="number"
-                value={currentType?.id || ""}
-                onChange={(e) =>
+                value={currentType?.id ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
                   setCurrentType({
                     ...currentType!,
-                    id: Number(e.target.value),
-                  })
-                }
+                    id: value ? Number(value) : 0, // Use 0 for empty values temporarily
+                  });
+                }}
                 disabled={!!currentType?.id} // ID нельзя менять после создания
               />
             </div>
