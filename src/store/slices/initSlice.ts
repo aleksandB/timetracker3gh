@@ -1,9 +1,9 @@
 // src/store/slices/initSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../entities/user/types";
-import { Project, Direction } from "../../entities/types";
+import { Project, Direction, Type } from "../../entities/types";
 import { TimeEntry } from "../../entities/types";
-import { setProjects, setDirections } from "./projectSlice";
+import { setProjects, setDirections, setTypes } from "./projectSlice";
 import { setTimeEntries } from "./timeEntrySlice";
 import { setUsers } from "./userSlice";
 
@@ -11,6 +11,7 @@ interface InitialData {
   users: User[];
   projects: Project[];
   directions: Direction[];
+  types: Type[];
   timeEntries: TimeEntry[];
 }
 
@@ -76,13 +77,16 @@ export const loadData = (jsonData: InitialData) => (dispatch: any) => {
     dispatch(setUsers(jsonData.users));
     // Если у вас есть отдельный слайс для текущего пользователя, возможно, нужно обновить его
 
-    // 2. Загружаем проекты
+    // 2. Загружаем типы (новая структура)
+    dispatch(setTypes(jsonData.types || []));
+
+    // 3. Загружаем проекты
     dispatch(setProjects(jsonData.projects));
 
-    // 3. Загружаем направления
+    // 4. Загружаем направления
     dispatch(setDirections(jsonData.directions));
 
-    // 4. Загружаем записи времени
+    // 5. Загружаем записи времени
     dispatch(setTimeEntries(jsonData.timeEntries));
 
     dispatch(loadDataSuccess());
@@ -103,6 +107,7 @@ export const saveData = () => (dispatch: any, getState: any) => {
       users: state.users.list,
       projects: state.projects.projects,
       directions: state.projects.directions,
+      types: state.projects.types,
       timeEntries: state.timeEntries,
     };
 

@@ -4,28 +4,91 @@
       "id": "admin-1",
       "name": "Иван Петров",
       "role": "admin",
-      "position": "Администратор"
+      "position": "Администратор",
+      "projectIds": ["proj-admin", "proj-main"]
     },
     {
       "id": "user-manager-1",
       "name": "Тимлид",
       "role": "manager",
-      "position": "Тимлид"
+      "position": "Тимлид",
+      "projectIds": ["proj-admin", "proj-main", "proj-sub1"]
     },
     {
       "id": "user-employee-1",
       "name": "Анна Смирнова",
       "role": "employee",
-      "position": "Frontend Developer"
+      "position": "Frontend Developer",
+      "projectIds": ["proj-admin", "proj-main", "proj-sub1", "proj-frontend"]
+    }
+  ],
+  "types": [
+    {
+      "id": 1,
+      "name": "Административный",
+      "parentId": null
+    },
+    {
+      "id": 2,
+      "name": "Технический",
+      "parentId": null
+    },
+    {
+      "id": 101,
+      "name": "Административная задача",
+      "parentId": 1
+    },
+    {
+      "id": 102,
+      "name": "Frontend",
+      "parentId": 2
+    },
+    {
+      "id": 103,
+      "name": "Backend",
+      "parentId": 2
+    },
+    {
+      "id": 104,
+      "name": "DevOps",
+      "parentId": 2
     }
   ],
   "projects": [
     {
       "id": "proj-admin",
+      "parentId": null,
       "name": "Административные задачи",
-      "type": "administrative",
-      "directionIds": ["dir-vacation", "dir-sick", "dir-dayoff"],
+      "typeId": 1,
       "shortName": "АДМ"
+    },
+    {
+      "id": "proj-main",
+      "parentId": null,
+      "name": "Основной проект",
+      "typeId": 2,
+      "shortName": "ОСН"
+    },
+    {
+      "id": "proj-sub1",
+      "parentId": "proj-main",
+      "name": "Подпроект 1",
+      "typeId": 2,
+      "shortName": "П1"
+    },
+    {
+      "id": "proj-frontend",
+      "parentId": "proj-sub1",
+      "name": "Frontend разработка",
+      "typeId": 102,
+      "shortName": "FEND"
+    },
+    {
+      "id": "proj-backend",
+      "parentId": "proj-sub1",
+      "name": "Backend разработка",
+      "typeId": 103,
+      "shortName": "BACK"
     }
   ],
   "directions": [
@@ -52,197 +115,112 @@
       "color": "#8B5CF6",
       "type": "administrative",
       "isSpecial": true
+    },
+    {
+      "id": "dir-meeting",
+      "projectId": "proj-main",
+      "name": "Встречи",
+      "color": "#10B981",
+      "type": "technical"
+    },
+    {
+      "id": "dir-development",
+      "projectId": "proj-main",
+      "name": "Разработка",
+      "color": "#F59E0B",
+      "type": "technical"
     }
   ],
   "timeEntries": [
     {
       "id": "entry-admin-vacation-1",
-      "userId": "user-admin-1",
+      "userId": "admin-1",
       "directionId": "dir-vacation",
-      "date": "2025-10-06",
+      "projectId": "proj-admin",
+      "date": "2025-11-03",
       "regular": 8,
       "overtime": 0,
       "description": "Ежегодный отпуск"
     },
     {
-      "id": "entry-admin-sick-1",
-      "userId": "user-admin-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-07",
-      "regular": 8,
+      "id": "entry-admin-meeting-1",
+      "userId": "admin-1",
+      "directionId": "dir-meeting",
+      "projectId": "proj-main",
+      "date": "2025-11-03",
+      "regular": 4,
       "overtime": 0,
-      "description": "Больничный"
+      "description": "Планирование"
     },
     {
-      "id": "entry-admin-dayoff-1",
-      "userId": "user-admin-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-08",
-      "regular": 8,
+      "id": "entry-admin-development-1",
+      "userId": "admin-1",
+      "directionId": "dir-development",
+      "projectId": "proj-main",
+      "date": "2025-11-04",
+      "regular": 4,
       "overtime": 0,
-      "description": "Отгул"
+      "description": "Разработка"
     },
     {
-      "id": "entry-admin-vacation-2",
-      "userId": "user-admin-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-09",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
-    },
-    {
-      "id": "entry-admin-sick-2",
-      "userId": "user-admin-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-10",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Больничный"
-    },
-    {
-      "id": "entry-admin-dayoff-2",
-      "userId": "user-admin-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-13",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Отгул"
-    },
-    {
-      "id": "entry-admin-vacation-3",
-      "userId": "user-admin-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-14",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
-    },
-    {
-      "id": "entry-mgr-vacation-1",
+      "id": "entry-mgr-meeting-1",
       "userId": "user-manager-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-06",
-      "regular": 8,
+      "directionId": "dir-meeting",
+      "projectId": "proj-main",
+      "date": "2025-11-03",
+      "regular": 4,
       "overtime": 0,
-      "description": "Ежегодный отпуск"
+      "description": "Спринт планирование"
     },
     {
-      "id": "entry-mgr-sick-1",
+      "id": "entry-mgr-development-1",
       "userId": "user-manager-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-07",
-      "regular": 8,
+      "directionId": "dir-development",
+      "projectId": "proj-sub1",
+      "date": "2025-11-03",
+      "regular": 4,
       "overtime": 0,
-      "description": "Больничный"
+      "description": "Разработка подпроекта"
     },
     {
-      "id": "entry-mgr-dayoff-1",
+      "id": "entry-mgr-meeting-2",
       "userId": "user-manager-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-08",
-      "regular": 8,
+      "directionId": "dir-meeting",
+      "projectId": "proj-sub1",
+      "date": "2025-11-04",
+      "regular": 2,
       "overtime": 0,
-      "description": "Отгул"
+      "description": "Ретроспектива"
     },
     {
-      "id": "entry-mgr-vacation-2",
-      "userId": "user-manager-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-09",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
-    },
-    {
-      "id": "entry-mgr-sick-2",
-      "userId": "user-manager-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-10",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Больничный"
-    },
-    {
-      "id": "entry-mgr-dayoff-2",
-      "userId": "user-manager-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-13",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Отгул"
-    },
-    {
-      "id": "entry-mgr-vacation-3",
-      "userId": "user-manager-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-14",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
-    },
-    {
-      "id": "entry-emp-vacation-1",
+      "id": "entry-emp-development-1",
       "userId": "user-employee-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-06",
-      "regular": 8,
+      "directionId": "dir-development",
+      "projectId": "proj-frontend",
+      "date": "2025-11-03",
+      "regular": 6,
       "overtime": 0,
-      "description": "Ежегодный отпуск"
+      "description": "Разработка интерфейса"
     },
     {
-      "id": "entry-emp-sick-1",
+      "id": "entry-emp-meeting-1",
       "userId": "user-employee-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-07",
-      "regular": 8,
+      "directionId": "dir-meeting",
+      "projectId": "proj-sub1",
+      "date": "2025-11-03",
+      "regular": 2,
       "overtime": 0,
-      "description": "Больничный"
+      "description": "Еженедельная встреча"
     },
     {
-      "id": "entry-emp-dayoff-1",
+      "id": "entry-emp-development-2",
       "userId": "user-employee-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-08",
+      "directionId": "dir-development",
+      "projectId": "proj-frontend",
+      "date": "2025-11-04",
       "regular": 8,
       "overtime": 0,
-      "description": "Отгул"
-    },
-    {
-      "id": "entry-emp-vacation-2",
-      "userId": "user-employee-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-09",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
-    },
-    {
-      "id": "entry-emp-sick-2",
-      "userId": "user-employee-1",
-      "directionId": "dir-sick",
-      "date": "2025-10-10",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Больничный"
-    },
-    {
-      "id": "entry-emp-dayoff-2",
-      "userId": "user-employee-1",
-      "directionId": "dir-dayoff",
-      "date": "2025-10-13",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Отгул"
-    },
-    {
-      "id": "entry-emp-vacation-3",
-      "userId": "user-employee-1",
-      "directionId": "dir-vacation",
-      "date": "2025-10-14",
-      "regular": 8,
-      "overtime": 0,
-      "description": "Ежегодный отпуск"
+      "description": "Разработка компонентов"
     }
   ]
 }

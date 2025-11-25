@@ -6,4 +6,5 @@ export interface User {
   role: UserRole;
   position?: string;
   avatar?: string;
+  projectIds?: string[]; // Array of project IDs assigned to the user
 }
