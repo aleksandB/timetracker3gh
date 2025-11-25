@@ -115,8 +115,7 @@ export const projectSlice = createSlice({
     // Migration completion action - clears old structures after successful migration
     completeMigration: (state) => {
       state.oldProjects = []; // Clear old projects after migration
-      // We keep directions for backward compatibility with UI components
-      // In future phases, we can also clear directions when no longer needed
+      state.directions = []; // Clear directions after migration
     },
   },
 });

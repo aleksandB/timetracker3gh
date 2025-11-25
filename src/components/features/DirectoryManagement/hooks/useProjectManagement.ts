@@ -28,16 +28,11 @@ export const useProjectManagement = ({
 }: UseProjectManagementProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const projects = useSelector((state: RootState) => state.projects.projects);
-  const directions = useSelector(
-    (state: RootState) => state.projects.directions
-  );
   const types = useSelector(
     (state: RootState) => state.projects.types
   );
 
-  const [selectedDirectionIds, setSelectedDirectionIds] = useState<string[]>(
-    []
-  );
+  // Remove directions-related state as they are no longer used
 
   // ❗️Синхронизируем состояние при открытии диалога редактирования
   useEffect(() => {
@@ -90,10 +85,10 @@ export const useProjectManagement = ({
   // Возвращаем всё, что нужно UI
   return {
     projects,
-    directions,
+    directions: [], // Return empty array since directions are deprecated
     types,
-    selectedDirectionIds,
-    setSelectedDirectionIds,
+    selectedDirectionIds: [], // Return empty array since direction selection is deprecated
+    setSelectedDirectionIds: () => {}, // No-op function since direction selection is deprecated
     handleSave,
     handleEdit,
     handleDelete,

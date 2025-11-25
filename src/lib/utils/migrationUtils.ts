@@ -73,7 +73,7 @@ export function migrateOldProjectsToNew(
  * Migrate time entries to include projectId
  */
 export function migrateTimeEntriesWithProjectId(
-  timeEntries: TimeEntry[],
+  timeEntries: any[], // Accept old time entries with directionId
   directions: Direction[]
 ): TimeEntry[] {
   // Create a map of direction ID to project ID
@@ -83,13 +83,18 @@ export function migrateTimeEntriesWithProjectId(
   });
 
   // Update time entries to include projectId
-  return timeEntries.map(entry => {
+  return timeEntries.map((entry: any) => {
     const projectId = directionProjectMap.get(entry.directionId);
     return {
-      ...entry,
-      projectId: projectId || undefined,
+      id: entry.id,
+      date: entry.date,
+      projectId: projectId || 'unknown-project', // Default to 'unknown-project' if mapping fails
+      userId: entry.userId,
+      regular: entry.regular,
+      overtime: entry.overtime,
+      description: entry.description,
     };
-  });
+  }).filter(entry => entry.projectId !== 'unknown-project'); // Filter out entries that couldn't be mapped
 }
 
 /**
@@ -139,7 +144,7 @@ export function performFullMigration(
 
   return {
     projects,
-    directions, // Directions remain the same for backward compatibility
+    directions: [], // Remove directions completely after migration
     timeEntries: migratedTimeEntries,
     users: migratedUsers,
     types: allTypes,

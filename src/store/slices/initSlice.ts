@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../entities/user/types";
 import { Project, Direction, Type, OldProject } from "../../entities/types";
 import { TimeEntry } from "../../entities/types";
-import { setProjects, setDirections, setTypes } from "./projectSlice";
+import { setProjects, setDirections, setTypes, completeMigration } from "./projectSlice";
 import { setTimeEntries } from "./timeEntrySlice";
 import { setUsers } from "./userSlice";
 import { performFullMigration, isMigrationNeeded } from "../../lib/utils/migrationUtils";
@@ -106,6 +106,9 @@ export const loadData = (jsonData: InitialData) => (dispatch: any) => {
       dispatch(setTimeEntries(migratedData.timeEntries));
       // Users are updated with projectIds during migration
       dispatch(setUsers(migratedData.users));
+      
+      // Complete migration by clearing old structures
+      dispatch(completeMigration());
     } else {
       // No migration needed, load data as is
       // 2. Загружаем типы (новая структура)
