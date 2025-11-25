@@ -1,0 +1,252 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "Иван Петров",
+      "role": "admin",
+      "position": "Администратор"
+    },
+    {
+      "id": "user-manager-1",
+      "name": "Тимлид",
+      "role": "manager",
+      "position": "Тимлид"
+    },
+    {
+      "id": "user-employee-1",
+      "name": "Анна Смирнова",
+      "role": "employee",
+      "position": "Frontend Developer"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-admin",
+      "name": "Административные задачи",
+      "type": "administrative",
+      "directionIds": [
+        "dir-vacation",
+        "dir-sick",
+        "dir-dayoff"
+      ],
+      "shortName": "АДМ"
+    }
+  ],
+  "directions": [
+    {
+      "id": "dir-vacation",
+      "projectId": "proj-admin",
+      "name": "Отпуск",
+      "color": "#3B82F6",
+      "type": "administrative",
+      "isSpecial": true
+    },
+    {
+      "id": "dir-sick",
+      "projectId": "proj-admin",
+      "name": "Больничный",
+      "color": "#EF4444",
+      "type": "administrative",
+      "isSpecial": true
+    },
+    {
+      "id": "dir-dayoff",
+      "projectId": "proj-admin",
+      "name": "Отгул",
+      "color": "#8B5CF6",
+      "type": "administrative",
+      "isSpecial": true
+    }
+  ],
+  "timeEntries": [
+    {
+      "id": "entry-admin-vacation-1",
+      "userId": "user-admin-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-06",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-admin-sick-1",
+      "userId": "user-admin-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-07",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-admin-dayoff-1",
+      "userId": "user-admin-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-08",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-admin-vacation-2",
+      "userId": "user-admin-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-09",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-admin-sick-2",
+      "userId": "user-admin-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-10",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-admin-dayoff-2",
+      "userId": "user-admin-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-13",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-admin-vacation-3",
+      "userId": "user-admin-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-14",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-mgr-vacation-1",
+      "userId": "user-manager-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-06",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-mgr-sick-1",
+      "userId": "user-manager-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-07",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-mgr-dayoff-1",
+      "userId": "user-manager-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-08",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-mgr-vacation-2",
+      "userId": "user-manager-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-09",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-mgr-sick-2",
+      "userId": "user-manager-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-10",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-mgr-dayoff-2",
+      "userId": "user-manager-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-13",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-mgr-vacation-3",
+      "userId": "user-manager-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-14",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-emp-vacation-1",
+      "userId": "user-employee-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-06",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-emp-sick-1",
+      "userId": "user-employee-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-07",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-emp-dayoff-1",
+      "userId": "user-employee-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-08",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-emp-vacation-2",
+      "userId": "user-employee-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-09",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    },
+    {
+      "id": "entry-emp-sick-2",
+      "userId": "user-employee-1",
+      "directionId": "dir-sick",
+      "date": "2025-10-10",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Больничный"
+    },
+    {
+      "id": "entry-emp-dayoff-2",
+      "userId": "user-employee-1",
+      "directionId": "dir-dayoff",
+      "date": "2025-10-13",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Отгул"
+    },
+    {
+      "id": "entry-emp-vacation-3",
+      "userId": "user-employee-1",
+      "directionId": "dir-vacation",
+      "date": "2025-10-14",
+      "regular": 8,
+      "overtime": 0,
+      "description": "Ежегодный отпуск"
+    }
+  ]
+}
