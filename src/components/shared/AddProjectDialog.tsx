@@ -10,7 +10,7 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox"; // убедитесь, что у вас есть компонент Checkbox
-import { Project, Direction } from "../../entities/project/types";
+import { Project, Direction } from "../../entities/types";
 import { ProjectTreeNode, buildProjectTree } from "../../lib/utils/projectUtils";
 
 interface AddProjectDialogProps {
